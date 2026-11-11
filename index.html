@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="กินบ้านเรา เว็บสั่งอาหารร้านท้องถิ่นเชียงใหม่ ค่าคอมต่ำ ค่าส่งตามอำเภอ">
+<meta name="theme-color" content="#1f6b4a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
+<style>*,*::before,*::after{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>กินบ้านเรา เชียงใหม่</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: mobile app column (max 480px) with sticky header, view switching, fixed bottom cart bar */
+:root{
+  --bg:#f3f6f2; --surface:#ffffff; --fg:#1b241e; --muted:#5e6b62; --line:#dde5dd;
+  --leaf:#1f6b4a; --leaf-soft:#e2efe7; --chili:#d9432a; --chili-soft:#fbe6e1; --gold:#b7791f;
+  --display:"Prompt","Noto Sans Thai",system-ui,sans-serif;
+  --body:"Noto Sans Thai",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121814; --surface:#1b231d; --fg:#e8efe9; --muted:#9db0a3; --line:#2b372f;
+  --leaf:#5cc293; --leaf-soft:#1f3328; --chili:#ff7a5f; --chili-soft:#3a221d; --gold:#e3a94a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121814; --surface:#1b231d; --fg:#e8efe9; --muted:#9db0a3; --line:#2b372f;
+  --leaf:#5cc293; --leaf-soft:#1f3328; --chili:#ff7a5f; --chili-soft:#3a221d; --gold:#e3a94a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--leaf)}
+.app{max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:96px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--leaf);color:#fff;
+  padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;gap:12px}
+header h1{font-family:var(--display);font-size:20px;margin:0;font-weight:700;flex:1;min-width:0}
+header small{display:block;font-family:var(--body);font-weight:400;font-size:13px;opacity:.85}
+.iconbtn{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:10px;padding:8px 12px;font:inherit;font-size:15px;cursor:pointer}
+.iconbtn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--chili);outline-offset:2px}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;display:flex;flex-direction:column;gap:18px}
+h2{font-family:var(--display);font-size:19px;margin:0;text-wrap:balance}
+.search{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.note{font-size:13px;color:var(--muted);margin:0}
+.list{display:flex;flex-direction:column;gap:12px}
+.rest{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.thumb{flex:none;width:72px;height:72px;border-radius:12px;display:grid;place-items:center;font-size:36px;background:var(--leaf-soft)}
+.rest .info{min-width:0;flex:1}
+.rest .name{font-family:var(--display);font-weight:600;font-size:17px}
+.meta{font-size:13px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:6px;background:var(--chili-soft);color:var(--chili);font-weight:600;margin-right:6px}
+.famous{background:var(--leaf-soft);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.famous h2{color:var(--leaf)}
+.menu{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.dish{display:flex;gap:12px;align-items:center;padding-block:12px;border-bottom:1px solid var(--line)}
+.dish .thumb{width:56px;height:56px;font-size:28px}
+.dish .info{flex:1;min-width:0}
+.price{font-variant-numeric:tabular-nums;font-weight:600}
+.qty{display:flex;align-items:center;gap:8px}
+.qbtn{width:34px;height:34px;border-radius:50%;border:1px solid var(--leaf);background:var(--surface);color:var(--leaf);font-size:20px;line-height:1;cursor:pointer}
+.qbtn.add{background:var(--leaf);color:#fff}
+.qty span{min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));padding-top:12px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:linear-gradient(transparent,var(--bg) 30%)}
+.bar button,.primary{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:448px;margin:0 auto;box-sizing:border-box;
+  background:var(--chili);color:#fff;border:0;border-radius:14px;padding:15px 18px;font-family:var(--display);font-size:17px;font-weight:600;cursor:pointer}
+.primary{justify-content:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
+label{font-weight:500;font-size:14px;display:flex;flex-direction:column;gap:6px}
+input,select,textarea{padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit}
+.row{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.row.total{font-family:var(--display);font-size:18px;font-weight:700;border-top:1px dashed var(--line);padding-top:10px}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay label{flex-direction:row;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;background:var(--bg)}
+.pay label:has(input:checked){border-color:var(--leaf);background:var(--leaf-soft)}
+.qr{display:flex;gap:14px;align-items:center}
+.qr canvas{border-radius:8px;background:#fff;flex:none}
+.err{color:var(--chili);font-size:14px;margin:0}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steps li{display:flex;gap:12px;position:relative;padding-bottom:18px}
+.steps li:last-child{padding-bottom:0}
+.dot{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:13px;z-index:1;color:var(--muted)}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:12px;top:26px;bottom:0;width:2px;background:var(--line)}
+.steps li.done .dot{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.steps li.done::after{background:var(--leaf)}
+.steps li.now .dot{border-color:var(--chili);color:var(--chili);font-weight:700}
+.steps li.now .st{color:var(--chili);font-weight:600}
+.st{font-weight:500}
+.ghost{background:transparent;border:1px dashed var(--muted);color:var(--muted);border-radius:12px;padding:11px;font:inherit;cursor:pointer}
+.stars{display:flex;gap:6px}
+.stars button{background:none;border:0;font-size:30px;cursor:pointer;color:var(--line);padding:0}
+.stars button.on{color:var(--gold)}
+.empty{text-align:center;color:var(--muted);padding-block:40px}
+@media (prefers-reduced-motion:no-preference){.view{animation:in .18s ease-out}@keyframes in{from{opacity:.4;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="iconbtn" id="back" hidden aria-label="ย้อนกลับ">←</button>
+    <h1 id="htitle">กินบ้านเรา<small>ส่งอาหารร้านเชียงใหม่ ค่าคอมต่ำ</small></h1>
+    <button class="iconbtn" id="cartBtn" aria-label="ตะกร้า">🧺 <span id="cartCount">0</span></button>
+  </header>
+
+  <!-- หน้าแรก -->
+  <section class="view" id="v-home">
+    <div class="wrap">
+      <input class="search" id="q" type="search" placeholder="ค้นหาร้านหรือเมนู เช่น ข้าวซอย">
+      <div>
+        <div class="chips" id="zoneChips" role="group" aria-label="เลือกอำเภอ"></div>
+      </div>
+      <div class="famous" id="famousBox">
+        <h2>ร้านดังประจำจังหวัด</h2>
+        <div class="list" id="famousList"></div>
+      </div>
+      <h2>ร้านทั้งหมด</h2>
+      <div class="list" id="restList"></div>
+      <p class="note">ข้อมูลร้านและเมนูในหน้านี้เป็นตัวอย่างสมมติ</p>
+    </div>
+  </section>
+
+  <!-- หน้าร้าน -->
+  <section class="view" id="v-rest" hidden>
+    <div class="wrap">
+      <div class="rest" style="cursor:default" id="restHead"></div>
+      <div class="menu" id="menuList"></div>
+    </div>
+  </section>
+
+  <!-- ตะกร้า -->
+  <section class="view" id="v-cart" hidden>
+    <div class="wrap" id="cartWrap"></div>
+  </section>
+
+  <!-- ติดตามออเดอร์ -->
+  <section class="view" id="v-track" hidden>
+    <div class="wrap" id="trackWrap"></div>
+  </section>
+
+  <div class="bar" id="bar" hidden><button id="barBtn"><span id="barLeft"></span><span id="barRight"></span></button></div>
+</div>
+
+<script>
+// ===== ข้อมูลตัวอย่าง =====
+const ZONES=[
+  {id:"mueang",name:"อ.เมือง",fee:20},
+  {id:"sansai",name:"อ.สันทราย",fee:30},
+  {id:"hangdong",name:"อ.หางดง",fee:35},
+  {id:"maerim",name:"อ.แม่ริม",fee:40}
+];
+const RESTS=[
+  {id:1,name:"ข้าวซอยป้าแดง",zone:"mueang",emoji:"🍜",famous:true,rating:4.8,prep:15,tags:["อาหารเหนือ"],menu:[
+    {id:11,name:"ข้าวซอยไก่",price:60,emoji:"🍜"},{id:12,name:"ข้าวซอยเนื้อ",price:70,emoji:"🍜"},{id:13,name:"ขนมจีนน้ำเงี้ยว",price:55,emoji:"🥢"},{id:14,name:"น้ำมะนาวโซดา",price:30,emoji:"🍋"}]},
+  {id:2,name:"ไส้อั่วลุงจันทร์",zone:"sansai",emoji:"🌭",famous:true,rating:4.7,prep:10,tags:["ของฝาก"],menu:[
+    {id:21,name:"ไส้อั่ว 1 ขีด",price:80,emoji:"🌭"},{id:22,name:"แคบหมู",price:50,emoji:"🥓"},{id:23,name:"น้ำพริกหนุ่ม",price:45,emoji:"🌶️"},{id:24,name:"ข้าวเหนียว",price:10,emoji:"🍚"}]},
+  {id:3,name:"ตำนัวหน้าวัด",zone:"mueang",emoji:"🥗",famous:false,rating:4.5,prep:10,tags:["ส้มตำ"],menu:[
+    {id:31,name:"ตำไทย",price:45,emoji:"🥗"},{id:32,name:"ตำปูปลาร้า",price:50,emoji:"🥗"},{id:33,name:"ไก่ย่าง ครึ่งตัว",price:90,emoji:"🍗"},{id:34,name:"ข้าวเหนียว",price:10,emoji:"🍚"}]},
+  {id:4,name:"ขนมจีนแม่ริม",zone:"maerim",emoji:"🥢",famous:false,rating:4.4,prep:12,tags:["ร้านในตลาด"],menu:[
+    {id:41,name:"ขนมจีนน้ำยา",price:40,emoji:"🥢"},{id:42,name:"ขนมจีนแกงเขียวหวาน",price:45,emoji:"🥢"},{id:43,name:"ไข่ต้ม",price:10,emoji:"🥚"}]},
+  {id:5,name:"กาแฟดอยหางดง",zone:"hangdong",emoji:"☕",famous:false,rating:4.6,prep:8,tags:["กาแฟ"],menu:[
+    {id:51,name:"อเมริกาโน่เย็น",price:45,emoji:"🧊"},{id:52,name:"ลาเต้เย็น",price:55,emoji:"☕"},{id:53,name:"บราวนี่",price:50,emoji:"🍫"}]}
+];
+const STEPS=[
+  ["รอร้านยืนยัน","ร้านกำลังดูออเดอร์ของคุณ"],
+  ["ร้านรับออเดอร์แล้ว","ร้านยืนยันออเดอร์"],
+  ["กำลังทำอาหาร","ใช้เวลาประมาณ {prep} นาที"],
+  ["ไรเดอร์รับงาน","พี่ต้น · ฮอนด้าเวฟ กข 1234"],
+  ["ไรเดอร์รับอาหารแล้ว","กำลังเดินทางไปหาคุณ"],
+  ["ส่งถึงแล้ว","ขอให้อร่อยนะครับ"]
+];
+
+// ===== สถานะของแอป =====
+let state={view:"home",zone:"all",q:"",restId:null,cart:{restId:null,items:{}},order:null};
+let timer=null;
+const $=id=>document.getElementById(id);
+const baht=n=>"฿"+n.toLocaleString("th-TH");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const zoneName=id=>(ZONES.find(z=>z.id===id)||{}).name||"";
+const findRest=id=>RESTS.find(r=>r.id===id);
+const findDish=id=>{for(const r of RESTS){const d=r.menu.find(m=>m.id===id);if(d)return d}};
+const cartQty=()=>Object.values(state.cart.items).reduce((a,b)=>a+b,0);
+const cartSub=()=>Object.entries(state.cart.items).reduce((s,[id,q])=>s+findDish(+id).price*q,0);
+
+function go(view,extra={}){Object.assign(state,extra,{view});render();window.scrollTo(0,0)}
+
+// ===== หน้าแรก =====
+function restCard(r){
+  return `<button class="rest" data-rest="${r.id}"><div class="thumb">${r.emoji}</div><div class="info">
+  <div class="name">${esc(r.name)}</div>
+  <div class="meta">⭐ ${r.rating} · ${zoneName(r.zone)} · ${r.prep}–${r.prep+15} นาที</div>
+  <div style="margin-top:4px">${r.tags.map(t=>`<span class="tag">${t}</span>`).join("")}<span class="meta">ค่าส่ง ${baht(ZONES.find(z=>z.id===r.zone).fee)}</span></div>
+  </div></button>`;
+}
+function renderHome(){
+  $("zoneChips").innerHTML=[{id:"all",name:"ทุกอำเภอ"},...ZONES].map(z=>`<button class="chip" data-zone="${z.id}" aria-pressed="${state.zone===z.id}">${z.name}</button>`).join("");
+  const q=state.q.trim();
+  const match=r=>(state.zone==="all"||r.zone===state.zone)&&(!q||r.name.includes(q)||r.menu.some(m=>m.name.includes(q)));
+  const list=RESTS.filter(match);
+  const fam=list.filter(r=>r.famous);
+  $("famousBox").hidden=!fam.length||!!q;
+  $("famousList").innerHTML=fam.map(restCard).join("");
+  $("restList").innerHTML=list.length?list.map(restCard).join(""):`<p class="empty">ไม่พบร้านที่ตรงกับ "${esc(q)}"</p>`;
+}
+
+// ===== หน้าร้าน =====
+function renderRest(){
+  const r=findRest(state.restId);
+  $("restHead").innerHTML=`<div class="thumb">${r.emoji}</div><div class="info"><div class="name">${esc(r.name)}</div>
+  <div class="meta">⭐ ${r.rating} · ${zoneName(r.zone)} · เตรียมประมาณ ${r.prep} นาที</div></div>`;
+  $("menuList").innerHTML=r.menu.map(d=>{
+    const q=state.cart.restId===r.id?(state.cart.items[d.id]||0):0;
+    return `<div class="dish"><div class="thumb">${d.emoji}</div><div class="info"><div>${esc(d.name)}</div><div class="price">${baht(d.price)}</div></div>
+    <div class="qty">${q?`<button class="qbtn" data-dec="${d.id}" aria-label="ลด">−</button><span>${q}</span>`:""}<button class="qbtn add" data-inc="${d.id}" aria-label="เพิ่ม">+</button></div></div>`;
+  }).join("");
+}
+let pendingSwitch=null;
+function addDish(id){
+  const r=findRest(state.restId);
+  if(state.cart.restId&&state.cart.restId!==r.id&&cartQty()>0){
+    pendingSwitch=id;
+    $("menuList").insertAdjacentHTML("beforebegin",`<div class="card" id="switchBox"><p style="margin:0">ตะกร้ามีอาหารจาก <b>${esc(findRest(state.cart.restId).name)}</b> อยู่ สั่งได้ทีละร้าน ล้างตะกร้าเดิมไหม?</p>
+    <div class="pay"><button class="ghost" id="noSwitch">ไม่ล้าง</button><button class="primary" id="yesSwitch" style="padding:11px">ล้างแล้วเพิ่ม</button></div></div>`);
+    return;
+  }
+  state.cart.restId=r.id;
+  state.cart.items[id]=(state.cart.items[id]||0)+1;
+  render();
+}
+function decDish(id){
+  if(!state.cart.items[id])return;
+  if(--state.cart.items[id]<=0)delete state.cart.items[id];
+  if(!cartQty())state.cart={restId:null,items:{}};
+  render();
+}
+
+// ===== ตะกร้า =====
+function renderCart(){
+  if(!cartQty()){$("cartWrap").innerHTML=`<p class="empty">ตะกร้ายังว่าง<br>ไปเลือกร้านที่หน้าแรกได้เลย</p><button class="primary" id="toHome">เลือกร้านอาหาร</button>`;return}
+  const r=findRest(state.cart.restId);
+  const f=state.form||{zone:r.zone,addr:"",landmark:"",name:"",phone:"",pay:"promptpay"};
+  state.form=f;
+  const fee=ZONES.find(z=>z.id===f.zone).fee;
+  const sub=cartSub();
+  $("cartWrap").innerHTML=`
+  <h2>${esc(r.name)}</h2>
+  <div class="menu">${Object.entries(state.cart.items).map(([id,q])=>{const d=findDish(+id);return `<div class="dish"><div class="info"><div>${esc(d.name)}</div><div class="meta">${baht(d.price)} × ${q}</div></div>
+    <div class="qty"><button class="qbtn" data-dec="${id}" aria-label="ลด">−</button><span>${q}</span><button class="qbtn add" data-inc2="${id}" aria-label="เพิ่ม">+</button></div></div>`}).join("")}</div>
+  <form class="card" id="orderForm" novalidate>
+    <h2>ส่งที่ไหน</h2>
+    <label for="fZone">อำเภอ (ค่าส่งคิดตามโซน)<select id="fZone">${ZONES.map(z=>`<option value="${z.id}" ${z.id===f.zone?"selected":""}>${z.name} · ค่าส่ง ${baht(z.fee)}</option>`).join("")}</select></label>
+    <label for="fAddr">ที่อยู่<input id="fAddr" value="${esc(f.addr)}" placeholder="บ้านเลขที่ หมู่ ซอย ถนน"></label>
+    <label for="fLand">จุดสังเกต<input id="fLand" value="${esc(f.landmark)}" placeholder="เช่น ตรงข้ามวัด บ้านรั้วสีฟ้า"></label>
+    <label for="fName">ชื่อผู้รับ<input id="fName" value="${esc(f.name)}" placeholder="ชื่อเล่นก็ได้"></label>
+    <label for="fPhone">เบอร์โทร<input id="fPhone" inputmode="tel" value="${esc(f.phone)}" placeholder="08x-xxx-xxxx"></label>
+    <h2>จ่ายเงิน</h2>
+    <div class="pay">
+      <label><input type="radio" name="pay" id="payPP" value="promptpay" ${f.pay==="promptpay"?"checked":""}> พร้อมเพย์</label>
+      <label><input type="radio" name="pay" id="payCash" value="cash" ${f.pay==="cash"?"checked":""}> เงินสด</label>
+    </div>
+    ${f.pay==="promptpay"?`<div class="qr"><canvas id="qr" width="96" height="96" aria-label="QR ตัวอย่าง"></canvas><p class="meta" style="margin:0">QR จำลองสำหรับเดโม ยอด ${baht(sub+fee)}<br>ระบบจริงจะสร้าง QR ตามยอดให้อัตโนมัติ</p></div>`:`<p class="meta" style="margin:0">จ่ายเงินสดกับไรเดอร์ตอนรับอาหาร</p>`}
+    <div class="row"><span>ค่าอาหาร</span><span>${baht(sub)}</span></div>
+    <div class="row"><span>ค่าส่ง ${zoneName(f.zone)}</span><span>${baht(fee)}</span></div>
+    <div class="row total"><span>รวม</span><span>${baht(sub+fee)}</span></div>
+    <p class="err" id="formErr" hidden></p>
+    <button class="primary" type="submit">สั่งอาหาร ${baht(sub+fee)}</button>
+  </form>`;
+  if(f.pay==="promptpay")drawQR();
+}
+function drawQR(){
+  const c=$("qr");if(!c)return;const x=c.getContext("2d");const n=21,s=c.width/n;
+  x.fillStyle="#fff";x.fillRect(0,0,c.width,c.width);x.fillStyle="#111";
+  let seed=cartSub()+7;const rnd=()=>((seed=(seed*9301+49297)%233280)/233280);
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++){
+    const inF=(a,b)=>i>=a&&i<a+7&&j>=b&&j<b+7;
+    if(inF(0,0)||inF(0,14)||inF(14,0)){const a=i<7?i:i-14,b=j<7?j:j-14;const ring=Math.max(Math.abs(a-3),Math.abs(b-3));if(ring!==2)x.fillRect(j*s,i*s,s,s)}
+    else if(rnd()>.5)x.fillRect(j*s,i*s,s,s);
+  }
+}
+function readForm(){
+  const f=state.form;f.zone=$("fZone").value;f.addr=$("fAddr").value;f.landmark=$("fLand").value;f.name=$("fName").value;f.phone=$("fPhone").value;
+  f.pay=document.querySelector('input[name="pay"]:checked').value;
+}
+function submitOrder(){
+  readForm();const f=state.form;
+  const missing=[!f.addr.trim()&&"ที่อยู่",!f.name.trim()&&"ชื่อผู้รับ",!/^0\d{8,9}$/.test(f.phone.replace(/\D/g,""))&&"เบอร์โทร 10 หลัก"].filter(Boolean);
+  if(missing.length){const e=$("formErr");e.textContent="กรอก"+missing.join(", ")+" ก่อนสั่งนะครับ";e.hidden=false;return}
+  const fee=ZONES.find(z=>z.id===f.zone).fee;
+  state.order={no:"KB"+String(Date.now()).slice(-5),rest:findRest(state.cart.restId),items:{...state.cart.items},sub:cartSub(),fee,form:{...f},step:0,rating:0};
+  state.cart={restId:null,items:{}};state.form=null;
+  go("track");startTimer();
+}
+
+// ===== ติดตามออเดอร์ =====
+function startTimer(){clearInterval(timer);timer=setInterval(()=>{if(state.order&&state.order.step<STEPS.length-1){state.order.step++;if(state.view==="track")renderTrack()}else clearInterval(timer)},5000)}
+function renderTrack(){
+  const o=state.order;
+  if(!o){$("trackWrap").innerHTML=`<p class="empty">ยังไม่มีออเดอร์</p>`;return}
+  const done=o.step===STEPS.length-1;
+  $("trackWrap").innerHTML=`
+  <div class="card"><div class="row"><span class="meta">ออเดอร์ ${o.no}</span><span class="meta">${o.form.pay==="cash"?"จ่ายเงินสด":"จ่ายพร้อมเพย์"}</span></div>
+  <h2>${done?"ส่งถึงแล้ว":STEPS[o.step][0]}</h2>
+  <ol class="steps">${STEPS.map(([t,d],i)=>`<li class="${i<o.step||done?"done":i===o.step?"now":""}"><span class="dot">${i<o.step||done?"✓":i+1}</span><div><div class="st">${t}</div>${i<=o.step?`<div class="meta">${d.replace("{prep}",o.rest.prep)}</div>`:""}</div></li>`).join("")}</ol>
+  ${done?"":`<button class="ghost" id="nextStep">เลื่อนสถานะถัดไป (โหมดสาธิต)</button><p class="note">สถานะจะเลื่อนเองทุก 5 วินาที</p>`}
+  </div>
+  ${done?`<div class="card"><h2>ให้คะแนน ${esc(o.rest.name)}</h2><div class="stars" role="group" aria-label="ให้ดาว">${[1,2,3,4,5].map(n=>`<button data-star="${n}" class="${n<=o.rating?"on":""}" aria-label="${n} ดาว">★</button>`).join("")}</div>${o.rating?`<p class="meta" style="margin:0">ขอบคุณที่ให้ ${o.rating} ดาว</p>`:""}</div>`:""}
+  <div class="card"><h2>${esc(o.rest.name)}</h2>
+    ${Object.entries(o.items).map(([id,q])=>{const d=findDish(+id);return `<div class="row"><span>${esc(d.name)} × ${q}</span><span>${baht(d.price*q)}</span></div>`}).join("")}
+    <div class="row"><span>ค่าส่ง</span><span>${baht(o.fee)}</span></div>
+    <div class="row total"><span>รวม</span><span>${baht(o.sub+o.fee)}</span></div>
+    <div class="meta">ส่งถึง ${esc(o.form.name)} · ${esc(o.form.addr)} ${zoneName(o.form.zone)}${o.form.landmark?` · จุดสังเกต: ${esc(o.form.landmark)}`:""}</div>
+  </div>
+  ${done?`<button class="primary" id="toHome">สั่งอีกครั้ง</button>`:""}`;
+}
+
+// ===== วาดหน้าจอตามสถานะ =====
+function render(){
+  for(const v of ["home","rest","cart","track"])$("v-"+v).hidden=state.view!==v;
+  $("back").hidden=state.view==="home";
+  $("cartCount").textContent=cartQty();
+  const titles={home:'กินบ้านเรา<small>ส่งอาหารร้านเชียงใหม่ ค่าคอมต่ำ</small>',rest:"เมนูร้าน",cart:"ตะกร้าของฉัน",track:"ติดตามออเดอร์"};
+  $("htitle").innerHTML=titles[state.view];
+  if(state.view==="home")renderHome();
+  if(state.view==="rest")renderRest();
+  if(state.view==="cart")renderCart();
+  if(state.view==="track")renderTrack();
+  const showBar=(state.view==="home"||state.view==="rest")&&cartQty()>0;
+  $("bar").hidden=!showBar;
+  if(showBar){$("barLeft").textContent=`ดูตะกร้า · ${cartQty()} รายการ`;$("barRight").textContent=baht(cartSub())}
+  else if(state.view==="home"&&state.order&&state.order.step<STEPS.length-1){$("bar").hidden=false;$("barLeft").textContent="ออเดอร์กำลังมา";$("barRight").textContent=STEPS[state.order.step][0]}
+}
+
+// ===== รับการกดปุ่ม =====
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.zone){state.zone=t.dataset.zone;renderHome();return}
+  if(t.dataset.rest){go("rest",{restId:+t.dataset.rest});return}
+  if(t.dataset.inc){addDish(+t.dataset.inc);return}
+  if(t.dataset.inc2){state.cart.items[t.dataset.inc2]++;readForm();render();return}
+  if(t.dataset.dec){if(state.view==="cart")readForm();decDish(+t.dataset.dec);return}
+  if(t.dataset.star){state.order.rating=+t.dataset.star;renderTrack();return}
+  switch(t.id){
+    case "back":go(state.view==="cart"&&state.cart.restId?"rest":"home",state.view==="cart"&&state.cart.restId?{restId:state.cart.restId}:{});break;
+    case "cartBtn":go("cart");break;
+    case "barBtn":go(cartQty()?"cart":"track");break;
+    case "toHome":go("home");break;
+    case "nextStep":state.order.step++;startTimer();renderTrack();break;
+    case "yesSwitch":state.cart={restId:null,items:{}};state.form=null;addDish(pendingSwitch);break;
+    case "noSwitch":$("switchBox").remove();break;
+  }
+});
+document.addEventListener("change",e=>{
+  if(state.view!=="cart")return;
+  if(e.target.id==="fZone"||e.target.name==="pay"){readForm();renderCart()}
+});
+document.addEventListener("submit",e=>{e.preventDefault();submitOrder()});
+$("q").addEventListener("input",e=>{state.q=e.target.value;renderHome()});
+
+render();
+</script>
+</body>
+</html>
